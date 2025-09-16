@@ -21,11 +21,25 @@ function App() {
     try {
       const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
       const data = await response.json();
+      if (data.error) {
+        alert("CEP não encontrado");
+        return;
+      }
       setUf(data.uf || "UF não informada");
       setEstado(data.estado || "Estado não informado");
       setCidade(data.localidade || "Localidade não informada");
       setBairro(data.bairro || "Bairro não informado");
       setRua(data.logradouro || "Rua não informada");
+
+      // cria uma objeto de localização
+      const dados = {
+        Estado: data.estado || "Estado não informado",
+        Cidade: data.localidade || "Localidade não informada",
+        Bairro: data.bairro || "Bairro não informado",
+        Rua: data.logradouro || "Rua não informada",
+      };
+      // mostra os dados no console
+      console.table(dados);
     } catch (error) {
       console.log(error);
     }
@@ -53,27 +67,15 @@ function App() {
           {/* UF */}
           <div className="flex flex-col gap-2">
             <label htmlFor="">UF:</label>
-            <input
-              type="text"
-              readOnly
-              className="border rounded-2xl p-2"
-              value={uf}
-              onChange={(e) => {
-                setUf(e.target.value);
-              }}
-            />
+            <input type="text" className="border rounded-2xl p-2" value={uf} />
           </div>
           {/* Estado */}
           <div className="flex flex-col gap-2">
             <label htmlFor="">Estado:</label>
             <input
               type="text"
-              readOnly
               className="border rounded-2xl p-2"
               value={estado}
-              onChange={(e) => {
-                setEstado(e.target.value);
-              }}
             />
           </div>
           {/* Cidade */}
@@ -81,12 +83,8 @@ function App() {
             <label htmlFor="">Cidade:</label>
             <input
               type="text"
-              readOnly
               className="border rounded-2xl p-2"
               value={cidade}
-              onChange={(e) => {
-                setCidade(e.target.value);
-              }}
             />
           </div>
           {/* Bairro */}
@@ -94,26 +92,14 @@ function App() {
             <label htmlFor="">Bairro:</label>
             <input
               type="text"
-              readOnly
               className="border rounded-2xl p-2"
               value={bairro}
-              onChange={(e) => {
-                setBairro(e.target.value);
-              }}
             />
           </div>
           {/* Rua */}
           <div className="flex flex-col gap-2">
             <label htmlFor="">Rua:</label>
-            <input
-              type="text"
-              readOnly
-              className="border rounded-2xl p-2"
-              value={rua}
-              onChange={(e) => {
-                setRua(e.target.value);
-              }}
-            />
+            <input type="text" className="border rounded-2xl p-2" value={rua} />
           </div>
           <button
             type="submit"
